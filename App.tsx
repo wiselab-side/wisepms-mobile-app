@@ -10,7 +10,6 @@ function App(): React.JSX.Element {
     <SafeAreaView style={{flex: 1}} >
         <WebView
             source={{
-                // uri: 'https://dev.mobile.wiselabpms.co.kr:9092'
                 uri: 'https://mobile.wiselabpms.co.kr',          
                 method: 'GET',
                 headers: { 'Cache-Control': 'no-cache' },
