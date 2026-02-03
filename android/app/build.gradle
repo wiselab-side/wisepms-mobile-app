@@ -2,6 +2,11 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
+// Android Studio Gradle sync can fail to find `node` in PATH.
+// react-native-reanimated falls back to executing `node` to locate react-native.
+// Provide the react-native directory explicitly to avoid calling `node` during sync.
+ext.REACT_NATIVE_NODE_MODULES_DIR = file("$rootDir/../node_modules/react-native")
+
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
@@ -25,7 +30,7 @@ react {
 
     /* Bundling */
     //   A list containing the node command and its flags. Default is just 'node'.
-    // nodeExecutableAndArgs = ["node"]
+    nodeExecutableAndArgs = ["/usr/local/bin/node"]
     //
     //   The command to run when bundling. By default is 'bundle'
     // bundleCommand = "ram-bundle"
@@ -110,6 +115,9 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+
+    // Manual linking: react-native-geolocation-service (NativeModules.RNFusedLocation)
+    implementation project(':react-native-geolocation-service')
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

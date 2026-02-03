@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
+    <!-- 실기기/에뮬레이터 개발 시 ws/http://localhost(클리어텍스트) 접근이 막히지 않도록 허용 -->
     <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
         <domain includeSubdomains="true">10.0.2.2</domain>
+        <domain includeSubdomains="true">172.16.11.223</domain>
     </domain-config>
 </network-security-config>
