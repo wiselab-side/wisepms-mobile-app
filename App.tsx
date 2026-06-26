@@ -217,10 +217,10 @@ function App(): React.JSX.Element {
               ref={webViewRef}
               source={{
                   // uri: 'http://127.0.0.1:8090/',                   //로컬
-                  uri: 'http://localhost:8090/',                   //아이폰 로컬
+                  // uri: 'http://localhost:8090/',                   //아이폰 로컬
                   // uri: 'http://192.168.0.37:8090/',                     //안드로이드 로컬
                   // uri: 'http://dev.mobile.wiselabpms.co.kr:9091/', //개발
-                  // uri: 'https://mobile.wiselabpms.co.kr',          //운영
+                  uri: 'https://mobile.wiselabpms.co.kr',          //운영
                   
                   
                   method: 'GET',
