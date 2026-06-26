@@ -3,7 +3,6 @@ import WebView from 'react-native-webview';
 import type { WebView as WebViewType } from 'react-native-webview'; 
 import {
   Linking, 
-  SafeAreaView,
   BackHandler,
   Alert,
   PermissionsAndroid,
@@ -11,6 +10,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Geolocation from 'react-native-geolocation-service';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 function App(): React.JSX.Element {
 
@@ -211,54 +211,57 @@ function App(): React.JSX.Element {
   }
 
   return (
-    <SafeAreaView style={{flex: 1}} >
-        <WebView
-            ref={webViewRef}
-            source={{
-                // uri: 'http://127.0.0.1:8090/',                   //로컬
-                // uri: 'http://localhost:8090/',                   //아이폰 로컬
-                // uri: 'http://172.16.11.223:8090/',                     //안드로이드 로컬
-                // uri: 'http://dev.mobile.wiselabpms.co.kr:9091/', //개발
-                uri: 'https://mobile.wiselabpms.co.kr',          //운영
-                
-                
-                method: 'GET',
-                headers: { 'Cache-Control': 'no-cache' },
-            }}
-            allowFileAccess={true}
-            scalesPageToFit={true}
-            originWhitelist={['*']}
-            javaScriptEnabled={true}
-            domStorageEnabled={true}
-            mixedContentMode="compatibility"
-            allowsInlineMediaPlayback={true}
-            geolocationEnabled={true}
-            mediaPlaybackRequiresUserAction={false}
-            onNavigationStateChange={(navState) => {
-              setCanGoBack(navState.canGoBack);
-            }}
-            onError={(syntheticEvent) => {
-                const { nativeEvent } = syntheticEvent;
-                console.warn('WebView error: ', nativeEvent);
-            }}
-            onHttpError={(syntheticEvent) => {
-                const { nativeEvent } = syntheticEvent;
-                console.warn('WebView HTTP error: ', nativeEvent);
-            }}
-            onShouldStartLoadWithRequest={event => {
-              const url = event.url;
-              // mailto: 또는 tel: 링크는 WebView 대신 네이티브로 오픈
-              if (url.startsWith('mailto:') || url.startsWith('tel:')) {
-                Linking.canOpenURL(url)
-                  .then(supported => supported && Linking.openURL(url))
-                  .catch(err => console.warn('Linking error', err));
-                return false; // WebView 로 로드 차단
-              }
-              return true;  // 그 외는 WebView 로 정상 로드
-            }}
-            onMessage={receivePostMessage}
-        />
-    </SafeAreaView>
+    <SafeAreaProvider>
+        <SafeAreaView style={{flex: 1}} >
+          <WebView
+              ref={webViewRef}
+              source={{
+                  // uri: 'http://127.0.0.1:8090/',                   //로컬
+                  uri: 'http://localhost:8090/',                   //아이폰 로컬
+                  // uri: 'http://192.168.0.37:8090/',                     //안드로이드 로컬
+                  // uri: 'http://dev.mobile.wiselabpms.co.kr:9091/', //개발
+                  // uri: 'https://mobile.wiselabpms.co.kr',          //운영
+                  
+                  
+                  method: 'GET',
+                  headers: { 'Cache-Control': 'no-cache' },
+              }}
+              allowFileAccess={true}
+              scalesPageToFit={true}
+              originWhitelist={['*']}
+              javaScriptEnabled={true}
+              domStorageEnabled={true}
+              mixedContentMode="compatibility"
+              allowsInlineMediaPlayback={true}
+              geolocationEnabled={true}
+              mediaPlaybackRequiresUserAction={false}
+              onNavigationStateChange={(navState) => {
+                setCanGoBack(navState.canGoBack);
+              }}
+              onError={(syntheticEvent) => {
+                  const { nativeEvent } = syntheticEvent;
+                  console.warn('WebView error: ', nativeEvent);
+              }}
+              onHttpError={(syntheticEvent) => {
+                  const { nativeEvent } = syntheticEvent;
+                  console.warn('WebView HTTP error: ', nativeEvent);
+              }}
+              onShouldStartLoadWithRequest={event => {
+                const url = event.url;
+                // mailto: 또는 tel: 링크는 WebView 대신 네이티브로 오픈
+                if (url.startsWith('mailto:') || url.startsWith('tel:')) {
+                  Linking.canOpenURL(url)
+                    .then(supported => supported && Linking.openURL(url))
+                    .catch(err => console.warn('Linking error', err));
+                  return false; // WebView 로 로드 차단
+                }
+                return true;  // 그 외는 WebView 로 정상 로드
+              }}
+              onMessage={receivePostMessage}
+          />
+        </SafeAreaView>
+    </SafeAreaProvider>
+    
   );
 }
 
